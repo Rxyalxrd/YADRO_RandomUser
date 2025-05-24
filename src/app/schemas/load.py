@@ -1,7 +1,10 @@
 from pydantic import BaseModel
+from .user import UserResponse
 
 
 class LoadResponse(BaseModel):
+    users: list[UserResponse]
 
-    status: str
-    loaded: int
+
+class LoadUsersRequest(BaseModel):
+    limit: int

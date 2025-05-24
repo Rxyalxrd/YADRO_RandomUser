@@ -1,13 +1,30 @@
-from typing import Any
+from typing import Any, Annotated
 
 from fastapi import (
     APIRouter,
     status,
+    Path,
 )
 
 from app.services.user_loader import load_users
-from app.schemas.load import LoadResponse
+from app.schemas.load import (
+    LoadResponse, 
+    LoadUsersRequest,
+)
 from app.services import get_paginated_users
+from app.const import GE_USER_ID, LE_USER_ID
+
+
+
+Limit = Annotated[
+    int,
+    Path(
+        ...,
+        title="User ID",
+        ge=GE_USER_ID,
+        le=LE_USER_ID,
+    )
+]
 
 
 router = APIRouter()
@@ -30,5 +47,5 @@ async def get_users_page(page: int) -> dict[str, Any]:
     summary="Загрузить 1000 пользователей",
     description="Запрашивает 1000 пользователей с randomuser.me и сохраняет их в Redis",
 )
-async def load_users_endpoint() -> LoadResponse:
-    return await load_users()
+async def load_users_endpoint(data: LoadUsersRequest) -> list[LoadResponse]:
+    return await load_users(limit = data.limit)

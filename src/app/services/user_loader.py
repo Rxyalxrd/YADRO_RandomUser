@@ -1,14 +1,17 @@
 import httpx
 
+from app.schemas import LoadResponse
 from app.core import (
     get_redis,
     settings,
 )
 
 
-async def load_users():
+async def load_users(limit: int) -> list[LoadResponse]:
     async with httpx.AsyncClient() as client:
-        response = await client.get(settings.api_url)
+        url = f"{settings.api_url}/api/?results={limit}"
+
+        response = await client.get(url)
         users = response.json()["results"]
 
     r = await get_redis()
@@ -34,4 +37,17 @@ async def load_users():
 
     await pipe.execute()
 
-    return {"status": "ok", "loaded": len(users)}
+    users_for_response = [
+        {
+            "gender": user["gender"],
+            "first_name": user["name"]["first"],
+            "last_name": user["name"]["last"],
+            "phone": user["phone"],
+            "email": user["email"],
+            "city": user["location"]["city"],
+            "photo_url": user["picture"]["thumbnail"]
+        }
+        for user in users
+    ]
+
+    return {"users": users_for_response}

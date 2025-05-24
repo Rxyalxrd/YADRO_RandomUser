@@ -1,8 +1,8 @@
 from typing import Any
 
 from app.core import get_redis
+from app.const import PAGE_SIZE
 
-PAGE_SIZE = 5
 
 async def get_paginated_users(page: int = 1) -> dict[str, Any]:
     r = await get_redis()
@@ -23,8 +23,10 @@ async def get_paginated_users(page: int = 1) -> dict[str, Any]:
         }
 
     pipe = r.pipeline()
+
     for uid in user_ids:
         pipe.hgetall(f"user:{uid}")
+
     users_data: list[dict[str, Any]] = await pipe.execute()
 
     return {
