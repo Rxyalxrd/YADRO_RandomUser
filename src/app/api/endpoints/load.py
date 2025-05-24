@@ -32,7 +32,7 @@ router = APIRouter()
 
 @router.get(
     "/{page}",
-    summary="Получение пользователей с пагинацией",
+    summary="Получение пользователей.",
     description="Возвращает 5 пользователей на странице. Использует Redis.",
     status_code=status.HTTP_200_OK,
 )

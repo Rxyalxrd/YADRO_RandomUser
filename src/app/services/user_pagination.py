@@ -1,12 +1,10 @@
 from typing import Any
 
-from app.core import get_redis
+from app.core import r
 from app.const import PAGE_SIZE
 
 
 async def get_paginated_users(page: int = 1) -> dict[str, Any]:
-    r = await get_redis()
-
     total = await r.llen("user:order")
     page = max(1, page)
     start = (page - 1) * PAGE_SIZE
@@ -19,7 +17,7 @@ async def get_paginated_users(page: int = 1) -> dict[str, Any]:
             "page": page,
             "per_page": PAGE_SIZE,
             "total": total,
-            "users": []
+            "users": [],
         }
 
     pipe = r.pipeline()

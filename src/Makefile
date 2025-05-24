@@ -4,7 +4,7 @@
 	install
 
 install:
-	poetry install --no-root
+	uv sync
 
 clean:
 	@echo "Cleaning up Python directories..."
@@ -16,4 +16,4 @@ clean:
 	find .. -name ".mypy_cache" -type d -exec rm -r {} +
 
 run:
-	poetry run uvicorn app.main:app --reload
+	uv run uvicorn app.main:app --reload

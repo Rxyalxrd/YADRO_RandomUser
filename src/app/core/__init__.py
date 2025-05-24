@@ -1,7 +1,7 @@
-from .rds import get_redis
-from .setting import settings
+from .rds import redis as r
+from .settings import settings
 
 __all__ = (
-    "get_redis",
+    "r",
     "settings",
 )

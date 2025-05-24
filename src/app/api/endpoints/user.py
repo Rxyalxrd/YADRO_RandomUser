@@ -9,7 +9,7 @@ from fastapi import (
 from fastapi.exceptions import HTTPException
 from redis.exceptions import RedisError
 
-from app.core import get_redis
+from app.core import r
 from app.schemas import UserResponse
 from app.const import (
     GE_USER_ID,
@@ -41,11 +41,12 @@ UserID = Annotated[
     response_model=UserResponse,
 )
 async def get_random_user() -> UserResponse:
-    r = await get_redis()
 
     try:
         user_ids = await r.lrange(
-            "user:order", RDS_LEFT_RANGE, RDS_RIGHT_RANGE
+            "user:order",
+            RDS_LEFT_RANGE,
+            RDS_RIGHT_RANGE,
         )
 
         if not user_ids:
@@ -80,7 +81,6 @@ async def get_random_user() -> UserResponse:
     response_model=UserResponse,
 )
 async def get_user_by_id(user_id: UserID) -> UserResponse:
-    r = await get_redis()
 
     try:
         user = await r.hgetall(f"user:{user_id}")

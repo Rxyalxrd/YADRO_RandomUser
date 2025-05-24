@@ -6,6 +6,7 @@ from .endpoints import (
 )
 from app.pages import root_router
 
+
 main_router = APIRouter()
 
 main_router.include_router(
@@ -15,7 +16,7 @@ main_router.include_router(
 )
 main_router.include_router(
     user_router,
-    prefix="/hompage",
+    prefix="/homepage",
     tags=["Users"],
 )
 main_router.include_router(
