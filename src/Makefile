@@ -1,10 +1,10 @@
 .PHONY: 
 	clean, 
 	run,
-	install
+	install,
 
 install:
-	uv sync
+	poetry install --no-root
 
 clean:
 	@echo "Cleaning up Python directories..."
@@ -13,7 +13,9 @@ clean:
 	find . -name "*.log" -delete
 	find . -name "*.log.*" -delete
 	find . -name ".ruff_cache" -type d -exec rm -r {} +
+	find . -name ".mypy_cache" -type d -exec rm -r {} +
+	find .. -name ".ruff_cache" -type d -exec rm -r {} +
 	find .. -name ".mypy_cache" -type d -exec rm -r {} +
 
 run:
-	uv run uvicorn app.main:app --reload
+	poetry run uvicorn app.main:app --reload

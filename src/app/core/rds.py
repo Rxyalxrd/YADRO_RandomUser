@@ -8,4 +8,3 @@ redis = redis.Redis.from_url(
     decode_responses=True,
     encoding="utf-8",
 )
-
